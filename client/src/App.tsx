@@ -1,23 +1,44 @@
-import { Route, Routes } from "react-router";
-import Layout from "./components/Layout";
-import Accueil from "./pages/Accueil";
-import APropos from "./pages/APropos";
-import President from "./pages/President";
-import Contact from "./pages/Contact";
-import Adherer from "./pages/Adherer";
-import NotFound from "./pages/NotFound";
+import { useState } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import DonModal from './components/DonModal'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import Reveal from './components/Reveal'
+import ScrollToHash from './components/ScrollToHash'
+import WhatsAppFloat from './components/WhatsAppFloat'
+import Accueil from './pages/Accueil'
+import Administration from './pages/Administration'
+import Connexion from './pages/Connexion'
+import Contact from './pages/Contact'
+import LePresident from './pages/LePresident'
+import NosCombats from './pages/NosCombats'
+import Rejoindre from './pages/Rejoindre'
 
 export default function App() {
+  const [donOuvert, setDonOuvert] = useState(false)
+  const { pathname } = useLocation()
+
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route index element={<Accueil />} />
-        <Route path="a-propos" element={<APropos />} />
-        <Route path="le-president" element={<President />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="adherer" element={<Adherer />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
-  );
+    <>
+      <ScrollToHash />
+      <Reveal />
+      <Header />
+      {/* la clé relance le fondu d'entrée à chaque changement de page */}
+      <main className="page" key={pathname}>
+        <Routes>
+          <Route path="/" element={<Accueil onDon={() => setDonOuvert(true)} />} />
+          <Route path="/nos-combats" element={<NosCombats />} />
+          <Route path="/le-president" element={<LePresident />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/rejoindre" element={<Rejoindre />} />
+          <Route path="/connexion" element={<Connexion />} />
+          <Route path="/administration" element={<Administration />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <Footer />
+      <DonModal open={donOuvert} onClose={() => setDonOuvert(false)} />
+      <WhatsAppFloat />
+    </>
+  )
 }

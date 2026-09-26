@@ -1,0 +1,9 @@
+{
+  "name": "MDIJ — Mouvement Démocratique pour l'Insertion des Jeunes",
+  "short_name": "MDIJ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4E1A6B",
+  "icons": [{ "src": "/images/logo.png", "sizes": "512x512", "type": "image/png" }]
+}

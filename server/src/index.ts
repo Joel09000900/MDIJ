@@ -1,32 +1,54 @@
-import "dotenv/config";
-import express, { type ErrorRequestHandler } from "express";
-import cors from "cors";
-import { contactRouter } from "./routes/contact";
-import { adhesionRouter } from "./routes/adhesion";
+import cors from 'cors'
+import express from 'express'
+import helmet from 'helmet'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { config } from './config.js'
+import { baseAccessible, initBase } from './db.js'
+import { adhesionsRouter } from './routes/adhesions.js'
+import { authRouter } from './routes/auth.js'
+import { tableauRouter } from './routes/tableau.js'
 
-const app = express();
-const PORT = Number(process.env.PORT) || 3001;
+const app = express()
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN ?? "http://localhost:5173" }));
-app.use(express.json({ limit: "100kb" }));
+app.use(helmet({ contentSecurityPolicy: false }))
+app.use(cors({ origin: config.clientOrigins }))
+app.use(express.json({ limit: '20kb' }))
 
-app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok" });
-});
+app.get('/api/health', async (_req, res) => {
+  res.json({
+    ok: true,
+    service: 'mdij-api',
+    base: (await baseAccessible()) ? 'connectée' : 'injoignable',
+    time: new Date().toISOString(),
+  })
+})
 
-app.use("/api/contact", contactRouter);
-app.use("/api/adhesions", adhesionRouter);
+app.use('/api/auth', authRouter)
+app.use('/api/adhesions', adhesionsRouter)
+app.use('/api/tableau-de-bord', tableauRouter)
 
-app.use("/api", (_req, res) => {
-  res.status(404).json({ error: "Route introuvable" });
-});
+// En production (Render), le serveur peut aussi servir le front compilé.
+const here = path.dirname(fileURLToPath(import.meta.url))
+const clientDist = path.resolve(here, '..', '..', 'client', 'dist')
+if (existsSync(clientDist)) {
+  app.use(express.static(clientDist))
+  app.get(/^(?!\/api).*/, (_req, res) => res.sendFile(path.join(clientDist, 'index.html')))
+}
 
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
-  console.error(err);
-  res.status(500).json({ error: "Une erreur interne est survenue. Veuillez réessayer plus tard." });
-};
-app.use(errorHandler);
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(err)
+  res.status(500).json({ ok: false, error: 'Erreur serveur' })
+})
 
-app.listen(PORT, () => {
-  console.log(`Serveur MDIJ démarré sur http://localhost:${PORT}`);
-});
+// La table est créée au démarrage si elle n'existe pas encore.
+// Même si la base est injoignable, le site public doit rester servi.
+initBase()
+  .then(() => console.log('Base PostgreSQL prête'))
+  .catch((err) => console.error('Base PostgreSQL injoignable :', err instanceof Error ? err.message : err))
+  .finally(() => {
+    app.listen(config.port, () => {
+      console.log(`API MDIJ sur http://localhost:${config.port}`)
+    })
+  })

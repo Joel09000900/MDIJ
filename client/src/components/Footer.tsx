@@ -1,51 +1,42 @@
-import { Link } from "react-router";
-import { navLinks, site } from "../config/site";
+import type { CSSProperties } from 'react'
+import { Link } from 'react-router-dom'
+import { RESEAUX_CONTACT } from '../content'
+import Logo from './Logo'
+import LogoReseau from './LogoReseau'
 
+/**
+ * Pied de page volontairement sobre : les rubriques du site sont déjà
+ * dans le menu, on ne garde ici que l'identité, les réseaux et la mention légale.
+ */
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="container footer__grid">
-        <div>
-          <p className="footer__brand">
-            <span className="logo" aria-hidden="true">
-              {site.sigle.charAt(0)}
-            </span>
-            {site.sigle}
-          </p>
-          <p className="footer__muted">{site.slogan}</p>
-        </div>
+      <div className="container footer-inner">
+        <Link to="/" className="footer-marque">
+          <Logo taille={46} />
+          <span>
+            <strong>MDIJ</strong>
+            <small>Yopougon, Abidjan · Côte d'Ivoire</small>
+          </span>
+        </Link>
 
-        <div>
-          <h3>Navigation</h3>
-          <ul>
-            {navLinks.map((link) => (
-              <li key={link.to}>
-                <Link to={link.to}>{link.label}</Link>
-              </li>
-            ))}
-            <li>
-              <Link to="/adherer">Adhérer au mouvement</Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3>Contact</h3>
-          <ul className="footer__muted">
-            <li>{site.contact.adresse}</li>
-            <li>
-              <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
-            </li>
-            <li>{site.contact.telephone}</li>
-          </ul>
+        <div className="footer-reseaux">
+          {RESEAUX_CONTACT.map((r) => (
+            <a
+              key={r.id}
+              href={r.url}
+              aria-label={r.nom}
+              target={r.url === '#' ? undefined : '_blank'}
+              rel="noreferrer"
+              style={{ '--marque': r.couleur } as CSSProperties}
+            >
+              <LogoReseau nom={r.id} taille={19} />
+            </a>
+          ))}
         </div>
       </div>
 
-      <div className="footer__bottom">
-        <div className="container">
-          © {new Date().getFullYear()} {site.nomComplet}. Tous droits réservés.
-        </div>
-      </div>
+      <div className="footer-bottom">© 2024–2026 MDIJ — Tous droits réservés.</div>
     </footer>
-  );
+  )
 }
