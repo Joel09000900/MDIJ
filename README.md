@@ -34,6 +34,7 @@ mdij/
         ├── api.ts               appels à l'API Express
         ├── session.ts           jeton du président
         ├── stats.ts             calculs du tableau de bord
+        ├── theme.ts             mode clair / sombre du site
         ├── styles/global.css
         ├── pages/               Accueil · NosCombats · LePresident · Contact
         │                        Rejoindre · Connexion · Administration
@@ -57,6 +58,14 @@ npm run dev           # API sur :4000, site sur :5173
 
 `server/.env` contient déjà la chaîne Neon, le jeton et le mot de passe.
 Pour repartir de zéro : `cp server/.env.example server/.env`, puis renseigne les valeurs.
+
+## Mode nuit
+
+Le bouton 🌙 de la barre de navigation bascule **tout le site** en affichage
+sombre. Le choix est mémorisé ; sans choix, le site suit le réglage du système.
+La classe est posée par un court script de `index.html` avant le premier
+affichage, pour éviter un éclair blanc à l'ouverture. Les graphiques du tableau
+de bord ont leurs propres teintes de nuit, validées contre la surface sombre.
 
 ## Les pages
 

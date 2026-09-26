@@ -8,6 +8,7 @@ import Colonnes from '../components/admin/Colonnes'
 import Jauge from '../components/admin/Jauge'
 import Tuile from '../components/admin/Tuile'
 import { effacerJeton, lireJeton } from '../session'
+import { useSombre } from '../theme'
 import { compter, dateHeure, depuis, parJour } from '../stats'
 import type { Inscrit } from '../types'
 
@@ -32,6 +33,8 @@ export default function Administration() {
   const [etat, setEtat] = useState<Etat>('chargement')
   const [erreur, setErreur] = useState('')
   const naviguer = useNavigate()
+  // la carte de chaleur adapte sa légende au thème choisi dans la navbar
+  const sombre = useSombre()
 
   // filtres : ils pilotent tous les visuels de la page en même temps
   const [recherche, setRecherche] = useState('')
@@ -241,7 +244,11 @@ export default function Administration() {
 
           <article className="card graphe graphe-large">
             <h2>Activité croisée avec la commune</h2>
-            <p className="graphe-sous">Plus la case est foncée, plus l'effectif est important.</p>
+            <p className="graphe-sous">
+              {sombre
+                ? "Plus la case est claire, plus l'effectif est important."
+                : "Plus la case est foncée, plus l'effectif est important."}
+            </p>
             <Carte
               lignes={listeActivites}
               colonnes={listeCommunes}

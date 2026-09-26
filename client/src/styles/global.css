@@ -607,6 +607,13 @@ strong { font-weight: 700; }
   --serie-2: #f7931e;
   --serie-3: #3b82d6;
   --serie-reste: #b9b0c2;
+  /* rampe séquentielle de la carte de chaleur, du plus faible au plus fort */
+  --chaleur-1: #f0e6f7;
+  --chaleur-2: #d9c2ea;
+  --chaleur-3: #b98fd6;
+  --chaleur-4: #8b45b0;
+  --chaleur-5: #6b2a90;
+  --chaleur-6: #4e1a6b;
 }
 .admin-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
@@ -664,8 +671,16 @@ strong { font-weight: 700; }
   font-variant-numeric: tabular-nums;
   transition: transform var(--t);
 }
-.carte-case-foncee { color: var(--blanc); }
 .carte-case:hover { transform: scale(1.06); }
+.carte-case-vide { background: transparent; }
+.carte-case-p0 { background: var(--chaleur-1); }
+.carte-case-p1 { background: var(--chaleur-2); }
+.carte-case-p2 { background: var(--chaleur-3); }
+.carte-case-p3 { background: var(--chaleur-4); }
+.carte-case-p4 { background: var(--chaleur-5); }
+.carte-case-p5 { background: var(--chaleur-6); }
+/* le texte bascule selon la luminosité du fond, jamais l'inverse */
+.carte-case-p3, .carte-case-p4, .carte-case-p5 { color: var(--blanc); }
 
 /* Jauges de complétude */
 .jauges { display: flex; flex-direction: column; gap: 18px; }
@@ -676,6 +691,138 @@ strong { font-weight: 700; }
 .jauge-remplie { display: block; height: 100%; background: var(--violet-vif); border-radius: var(--rayon-rond); transition: width 0.7s var(--sortie); }
 .jauge-remplie-alerte { background: var(--orange); }
 .jauge small { display: block; margin-top: 6px; font-size: 12.5px; color: var(--gris-clair); }
+
+/* ---- Mode nuit ----
+   Posé sur <html> par le bouton de la navbar, sur l'ensemble du site.
+   Les teintes de graphiques ne sont pas un simple inversement : elles ont leurs
+   propres paliers, validés contre la surface sombre. */
+.theme-sombre {
+  --fond: #100d18;
+  --surface: #171320;
+  --surface-haute: #1e1829;
+  --texte: #ece8f2;
+  --gris: #b6acc4;
+  --gris-clair: #8d8399;
+  --violet: #cba4e6;
+  --violet-vif: #a06bc9;
+  --violet-clair: #221a2e;
+  --violet-bord: #322943;
+  --ombre-sm: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --ombre-md: 0 18px 44px rgba(0, 0, 0, 0.55);
+}
+.theme-sombre body { background: var(--fond); color: var(--texte); }
+
+.theme-sombre .admin {
+  --serie-1: #a06bc9;
+  --serie-2: #c07d22;
+  --serie-3: #4f88d4;
+  --serie-reste: #5d5470;
+  --chaleur-1: #241a30;
+  --chaleur-2: #33234a;
+  --chaleur-3: #452f63;
+  --chaleur-4: #5c3f80;
+  --chaleur-5: #7a55a4;
+  --chaleur-6: #a06bc9;
+}
+/* la rampe monte vers le clair : le texte sombre ne sert qu'au palier le plus vif */
+.theme-sombre .carte-case { color: var(--texte); }
+.theme-sombre .carte-case-p5 { color: #120f19; }
+
+.theme-sombre .header { background: rgba(16, 13, 24, 0.88); }
+.theme-sombre .header.is-scrolled { background: rgba(16, 13, 24, 0.96); border-bottom-color: var(--violet-bord); }
+.theme-sombre .nav a { color: var(--texte); }
+.theme-sombre .nav a:hover, .theme-sombre .nav a.is-active { color: var(--violet); }
+.theme-sombre .brand-text strong { color: var(--violet); }
+.theme-sombre .section { background: var(--fond); }
+
+.theme-sombre .card,
+.theme-sombre .tuile,
+.theme-sombre .filtres { background: var(--surface); border-color: var(--violet-bord); }
+
+.theme-sombre .filtres input,
+.theme-sombre .filtres select,
+.theme-sombre .demandes-recherche { background: var(--surface-haute); border-color: var(--violet-bord); color: var(--texte); }
+
+.theme-sombre .btn-outline-dark { background: var(--surface-haute); border-color: var(--violet-bord); color: var(--violet); }
+.theme-sombre .btn-outline-dark:hover { background: var(--violet-vif); border-color: var(--violet-vif); color: #120f19; }
+
+.theme-sombre .barres-piste,
+.theme-sombre .jauge-piste,
+.theme-sombre .empilee { background: #241d31; }
+.theme-sombre .empilee-part { border-right-color: var(--surface); }
+.theme-sombre .empilee-etiquette { color: #120f19; }
+
+.theme-sombre .table-demandes td { border-bottom-color: var(--violet-clair); }
+.theme-sombre .table-demandes th { border-bottom-color: var(--violet-bord); }
+.theme-sombre .table-demandes tbody tr:hover { background: var(--violet-clair); }
+.theme-sombre .etiquette { background: var(--violet-clair); color: var(--violet); }
+.theme-sombre .puce-registre { background: rgba(160, 107, 201, 0.22); color: #cba4e6; }
+.theme-sombre .puce-site { background: rgba(37, 211, 102, 0.18); color: #6ee7a0; }
+.theme-sombre .puce-ancienne { background: rgba(93, 84, 112, 0.35); color: var(--gris); }
+.theme-sombre .jauge-remplie-alerte { background: var(--serie-2); }
+.theme-sombre .jauge-alerte { color: #ff9d8a; }
+
+/* --- Site public en mode nuit --- */
+/* le dégradé du bas allait vers le blanc : il doit rejoindre le fond sombre */
+.theme-sombre .section-alt { background: linear-gradient(180deg, var(--violet-clair), var(--fond)); }
+.theme-sombre .hero { background: linear-gradient(125deg, #0c0913, var(--violet-fonce), #4a1d66, #0c0913); }
+.theme-sombre .hero-quote { background: var(--surface); color: var(--texte); }
+.theme-sombre .hero-quote strong { color: var(--violet); }
+
+.theme-sombre .reseau { background: var(--surface); border-color: var(--violet-bord); }
+.theme-sombre .reseau-texte strong { color: var(--violet); }
+
+.theme-sombre .form input,
+.theme-sombre .form select { background: var(--surface-haute); border-color: var(--violet-bord); color: var(--texte); }
+.theme-sombre .form input:hover, .theme-sombre .form select:hover { border-color: #4b3d61; }
+.theme-sombre .form input:focus,
+.theme-sombre .form select:focus,
+.theme-sombre .filtres input:focus,
+.theme-sombre .filtres select:focus,
+.theme-sombre .demandes-recherche:focus {
+  background: var(--surface-haute);
+  border-color: var(--violet-vif);
+  box-shadow: 0 0 0 4px rgba(160, 107, 201, 0.25);
+}
+.theme-sombre .form-ok { background: rgba(37, 211, 102, 0.14); color: #6ee7a0; border-color: rgba(37, 211, 102, 0.3); }
+.theme-sombre .err { color: #ff9d8a; }
+
+/* menu déroulant du mobile : seulement quand il est ouvert, sinon le fond
+   apparaîtrait aussi derrière les liens en grand écran */
+.theme-sombre .nav.is-open { background: var(--surface); border-bottom-color: var(--violet-bord); }
+.theme-sombre .nav.is-open a { border-bottom-color: var(--violet-clair); }
+.theme-sombre .nav .nav-cta { color: var(--blanc); }
+
+/* modale de don */
+.theme-sombre .modal { background: var(--surface); }
+.theme-sombre .modal-close:hover { background: var(--violet-clair); color: var(--violet); }
+.theme-sombre .pay-option { border-color: var(--violet-bord); }
+.theme-sombre .pay-option:hover { border-color: var(--violet-vif); }
+.theme-sombre .pay-cta { background: var(--violet-vif); color: #120f19; }
+.theme-sombre .don-numero { background: var(--violet-clair); border-color: var(--violet-bord); }
+
+.theme-sombre .pilier-icon,
+.theme-sombre .service-icon,
+.theme-sombre .contact-icon { background: var(--violet-clair); }
+.theme-sombre .pilier:hover .pilier-icon { background: #2c2140; }
+.theme-sombre .btn-outline-dark { color: var(--violet); }
+
+/* Le bouton de bascule du thème, dans la navbar */
+.bascule-theme {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--violet-bord);
+  background: transparent;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform var(--t), background var(--t), border-color var(--t);
+}
+.bascule-theme:hover { transform: rotate(-18deg) scale(1.08); background: var(--violet-clair); border-color: var(--violet-vif); }
+.header-outils { display: flex; align-items: center; gap: 12px; }
 
 /* Puces de provenance */
 .puce { display: inline-block; padding: 4px 11px; border-radius: var(--rayon-rond); font-size: 12px; font-weight: 700; white-space: nowrap; }

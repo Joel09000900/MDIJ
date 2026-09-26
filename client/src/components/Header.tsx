@@ -2,12 +2,18 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { NAV } from '../content'
 import { lireJeton } from '../session'
+import { appliquerTheme, themeInitial, type Theme } from '../theme'
 import Logo from './Logo'
 
 export default function Header() {
   const [ouvert, setOuvert] = useState(false)
   const [scrolle, setScrolle] = useState(false)
   const { pathname, hash } = useLocation()
+  const [theme, setTheme] = useState<Theme>(themeInitial)
+
+  useEffect(() => {
+    appliquerTheme(theme)
+  }, [theme])
 
   useEffect(() => {
     const onScroll = () => setScrolle(window.scrollY > 40)
@@ -42,18 +48,6 @@ export default function Header() {
           </span>
         </Link>
 
-        <button
-          type="button"
-          className={`burger ${ouvert ? 'is-open' : ''}`}
-          aria-label={ouvert ? 'Fermer le menu' : 'Ouvrir le menu'}
-          aria-expanded={ouvert}
-          onClick={() => setOuvert((v) => !v)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-
         <nav className={`nav ${ouvert ? 'is-open' : ''}`}>
           {NAV.map((l) => {
             // une fois le président connecté, « Connexion » mène à son tableau de bord
@@ -75,6 +69,31 @@ export default function Header() {
             Rejoindre
           </Link>
         </nav>
+
+        <div className="header-outils">
+          <button
+            type="button"
+            className="bascule-theme"
+            onClick={() => setTheme((t) => (t === 'sombre' ? 'clair' : 'sombre'))}
+            aria-pressed={theme === 'sombre'}
+            aria-label={theme === 'sombre' ? 'Passer en affichage clair' : 'Passer en affichage sombre'}
+            title={theme === 'sombre' ? 'Affichage clair' : 'Affichage sombre'}
+          >
+            {theme === 'sombre' ? '☀️' : '🌙'}
+          </button>
+
+          <button
+            type="button"
+            className={`burger ${ouvert ? 'is-open' : ''}`}
+            aria-label={ouvert ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={ouvert}
+            onClick={() => setOuvert((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </div>
     </header>
   )

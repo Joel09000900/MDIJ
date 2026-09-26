@@ -1,16 +1,15 @@
-import type { CSSProperties } from 'react'
-
 /**
  * Carte de chaleur : croise deux dimensions (activité × commune).
- * Rampe séquentielle d'une seule teinte, du clair au foncé — la valeur se lit
- * aussi en clair dans chaque case, donc jamais par la couleur seule.
+ * La rampe séquentielle vient du CSS (« --chaleur-1 » à « --chaleur-6 ») pour
+ * que le mode nuit ait ses propres paliers, et non un simple inversement.
+ * La valeur est écrite dans chaque case : jamais d'information par la couleur seule.
  */
-const RAMPE = ['#f0e6f7', '#d9c2ea', '#b98fd6', '#8b45b0', '#6b2a90', '#4e1a6b']
+const PALIERS = 6
 
 function palier(valeur: number, max: number): number {
   if (valeur === 0) return -1
-  const p = Math.ceil((valeur / max) * RAMPE.length) - 1
-  return Math.min(Math.max(p, 0), RAMPE.length - 1)
+  const p = Math.ceil((valeur / max) * PALIERS) - 1
+  return Math.min(Math.max(p, 0), PALIERS - 1)
 }
 
 export default function Carte({
@@ -47,8 +46,7 @@ export default function Carte({
                 return (
                   <td
                     key={c}
-                    className={`carte-case ${p >= 3 ? 'carte-case-foncee' : ''}`}
-                    style={{ background: p < 0 ? 'transparent' : RAMPE[p] } as CSSProperties}
+                    className={p < 0 ? 'carte-case carte-case-vide' : `carte-case carte-case-p${p}`}
                     title={`${l} · ${c} : ${v}`}
                   >
                     {v > 0 ? v : '—'}

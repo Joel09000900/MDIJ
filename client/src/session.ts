@@ -24,3 +24,4 @@ export function effacerJeton(): void {
     // rien à faire
   }
 }
+

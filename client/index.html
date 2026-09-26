@@ -22,6 +22,19 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Posé avant le premier affichage : sans cela, une page sombre
+      // clignoterait en blanc le temps que React démarre.
+      (function () {
+        try {
+          var t = localStorage.getItem('mdij.theme')
+          if (t !== 'sombre' && t !== 'clair') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'sombre' : 'clair'
+          }
+          if (t === 'sombre') document.documentElement.classList.add('theme-sombre')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
