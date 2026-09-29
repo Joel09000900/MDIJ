@@ -1,8 +1,13 @@
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
+import { heros } from '../imageFamien/accueil'
+
+/** La photo de fond est passée en variable CSS : les voiles restent dans la feuille de style. */
+const fond = { '--hero-image': `url(${heros})` } as CSSProperties
 
 export default function Hero() {
   return (
-    <section id="accueil" className="hero">
+    <section id="accueil" className="hero" style={fond}>
       <div className="container hero-inner">
         <div className="hero-text">
           <span className="badge">Côte d'Ivoire · Yopougon</span>
@@ -18,14 +23,6 @@ export default function Hero() {
             <Link to="/#about" className="btn btn-outline">Découvrir le MDIJ</Link>
           </div>
         </div>
-
-        <figure className="hero-visual">
-          <img src="/images/meeting.jpg" alt="Meeting du MDIJ à Yopougon" />
-          <figcaption className="hero-quote">
-            <strong>"Une jeunesse insérée, c'est une nation debout."</strong>
-            <span>— Konan Famien, Président</span>
-          </figcaption>
-        </figure>
       </div>
     </section>
   )
