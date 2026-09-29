@@ -12,6 +12,7 @@ import Connexion from './pages/Connexion'
 import Contact from './pages/Contact'
 import LePresident from './pages/LePresident'
 import NosCombats from './pages/NosCombats'
+import Realisation from './pages/Realisation'
 import Rejoindre from './pages/Rejoindre'
 import Services from './pages/Services'
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/nos-combats" element={<NosCombats />} />
           <Route path="/services" element={<Services onDon={() => setDonOuvert(true)} />} />
           <Route path="/le-president" element={<LePresident />} />
+          <Route path="/realisation" element={<Realisation />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/rejoindre" element={<Rejoindre />} />
           <Route path="/connexion" element={<Connexion />} />

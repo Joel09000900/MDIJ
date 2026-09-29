@@ -1,11 +1,13 @@
 import type { CSSProperties } from 'react'
+import { PORTRAITS } from '../imageFamien/le-president'
+import Carrousel from './Carrousel'
 
 export default function President() {
   return (
     <section id="president" className="section section-dark">
       <div className="container president-grid">
         <div className="president-photo" data-reveal>
-          <img src="/images/president.jpg" alt="Konan Famien, Président du MDIJ" />
+          <Carrousel images={PORTRAITS} libelle="Konan Famien, Président du MDIJ" />
         </div>
         <div data-reveal style={{ '--delai': '0.15s' } as CSSProperties}>
           <span className="section-tag">Le Président</span>

@@ -213,6 +213,129 @@ serveur de développement.
 
 ---
 
+### 7. Portraits défilants sur la page du Président
+
+**Contexte / demande :** sur `LePresident.tsx`, faire défiler les images du dossier
+`imageFamien/le-president` dans le cadre `.president-photo`, deux secondes par image.
+
+**Fichiers touchés :** `client/src/components/President.tsx`,
+`client/src/imageFamien/le-president/index.ts`, `client/src/styles/global.css`,
+`client/src/imageFamien/index.ts`, `client/src/imageFamien/README.md`.
+
+**Détail :**
+
+- Les cinq portraits (`Pfamien1` à `Pfamien5`) sont exportés en un tableau ordonné
+  `PORTRAITS` : l'ordre du fichier est l'ordre du défilé.
+- `President.tsx` empile les cinq images dans le cadre et fait tourner un index avec
+  `setInterval`, `DUREE = 2000` ms. Seule celle qui porte `is-active` est opaque ;
+  la transition CSS assure le fondu enchaîné.
+- Le minuteur est nettoyé au démontage. Il ne démarre pas si le système demande moins
+  d'animations (`prefers-reduced-motion`), ni s'il n'y a qu'une seule image — même
+  logique que le composant `Reveal`.
+- Les portraits étant empilés, ils se lisent comme une seule illustration : le cadre
+  porte `role="img"` et le libellé, les `<img>` ont un `alt` vide. Seule la première
+  est chargée d'emblée, les suivantes en `loading="lazy"`.
+- **Le cadre et les images sont séparés.** `.president-photo` reste la cible du
+  `data-reveal` ; un `.president-cadre` à l'intérieur porte la proportion 3/4, la
+  bordure orange, l'ombre, le découpage (`overflow: hidden`) et le survol. Seules les
+  images bougent dedans : plus aucun clignotement de bordure d'un portrait à l'autre,
+  et les glissements sont proprement coupés au bord du cadre.
+- **Une seule façon d'entrer, commune aux cinq portraits.** Le portrait au repos
+  attend agrandi de 7 % et décalé de 12 px vers le bas
+  (`transform: translateY(12px) scale(1.07)`) ; celui qui devient actif rejoint sa
+  place avec `.is-active { transform: none }`.
+
+  Une première version distribuait cinq entrées différentes à tour de rôle (glissement
+  depuis la droite, depuis la gauche, ouverture depuis le centre, redressement). Après
+  observation du rendu, la pose par le bas a été retenue pour tous : le défilé est plus
+  posé, et l'attention reste sur le portrait plutôt que sur l'effet.
+- Le fondu dure 0,85 s, le déplacement 2,1 s : le portrait continue donc de bouger
+  lentement une fois net, et le suivant arrive avant la fin du parcours — le défilé
+  n'a pas de temps mort.
+- Avec `prefers-reduced-motion`, transitions et transformations sont neutralisées sur
+  le cadre, son survol et les images ; le portrait courant s'affiche net.
+- L'ancienne image `/images/president.jpg` n'est plus utilisée.
+
+**Au passage :** le dossier `imageFamien/le-mouvement/` avait été supprimé du disque
+mais le barrel racine l'exportait toujours, ce qui cassait la compilation. La ligne
+correspondante et l'entrée du README ont été retirées.
+
+**Vérification :** `npm run build` — sans erreur, les cinq portraits sont intégrés au
+bundle. `/le-president` répond en 200.
+
+---
+
+### 8. Cadrage du bandeau « mobilisation »
+
+**Contexte / demande :** centrer l'image de la classe `.mobilisation`, affichée sur la
+page « Nos Combats ».
+
+**Fichiers touchés :** `client/src/styles/global.css`.
+
+**Détail :**
+
+- Le bandeau est en 21/8 (2,625) alors que la photo `mobilisation.jpg` fait
+  1600 × 1066, soit 3/2 (1,501). En `object-fit: cover`, seuls **57 % de la hauteur**
+  de la photo tiennent dans le bandeau.
+- Avec le cadrage par défaut (`object-position: center`, soit 50 %), la fenêtre visible
+  allait de 21 % à 79 % de la hauteur. Or les visages occupent le premier quart de
+  l'image (2 % à 28 %) : ils étaient coupés au-dessus.
+- `object-position: center top` fait démarrer la fenêtre à 0 % : elle couvre alors
+  0–57 %, et les visages se retrouvent vers le tiers supérieur du bandeau. C'est le
+  réglage qui les rapproche le plus du centre, la géométrie interdisant de descendre
+  davantage.
+- La règle vaut aussi sur mobile : la requête média passe le bandeau en 4/3, plus
+  étroit que la photo, donc la hauteur entière est visible et le cadrage vertical n'a
+  plus d'effet.
+
+**Vérification :** `npm run build` — sans erreur.
+
+---
+
+### 9. Nouvelle page « Réalisations »
+
+**Contexte / demande :** créer une page `Realisation.tsx` dans la barre de navigation,
+bâtie exactement comme `LePresident.tsx`, avec son dossier dans `imageFamien`.
+
+**Fichiers touchés :** créations `client/src/pages/Realisation.tsx`,
+`client/src/components/Realisations.tsx`, `client/src/components/Carrousel.tsx`,
+`client/src/imageFamien/realisation/index.ts` ; modifications `client/src/App.tsx`,
+`client/src/content.ts`, `client/src/components/President.tsx`,
+`client/src/styles/global.css`, `client/src/imageFamien/index.ts` et son README.
+
+**Détail :**
+
+- `pages/Realisation.tsx` reprend la structure de `LePresident.tsx` : le composant de
+  contenu, puis la bande d'appel à l'action vers `/rejoindre`.
+- `components/Realisations.tsx` reprend celle de `President.tsx` : carrousel à gauche,
+  intitulé, deux paragraphes et frise à droite. **Les textes sont provisoires**, à
+  remplacer par les vraies réalisations.
+- Route `/realisation` dans `App.tsx`, entrée `Réalisations` dans `NAV` après
+  « Le Président ». Le menu compte six entrées.
+- Dossier `imageFamien/realisation/` avec son `index.ts`, ajouté au barrel racine et au
+  README. Il exporte `REALISATIONS`.
+- Les six images `r1.jpeg` à `r6.jpeg` y sont déposées et exportées dans cet ordre :
+  le carrousel les fait défiler à gauche, deux secondes chacune, avec exactement les
+  mêmes transitions que la page du Président — c'est le même composant `Carrousel`.
+- Titre de la colonne de droite : **RÉALISATION YOPOUGON**.
+
+**Deux décisions prises au passage :**
+
+- **Le carrousel est factorisé plutôt que dupliqué.** Sa logique (minuteur, index,
+  respect de `prefers-reduced-motion`) vit maintenant dans `components/Carrousel.tsx`,
+  qui prend les images et un libellé. `President.tsx` l'utilise aussi. Les deux pages
+  restent donc identiques par construction, au lieu de diverger à la première
+  correction. Le composant renvoie `null` tant qu'aucune image n'est fournie, pour ne
+  pas afficher un cadre vide.
+- **Les classes CSS du cadre sont généralisées.** `.president-cadre` devient
+  `.carrousel-cadre` : la nouvelle page n'hérite pas d'un nom qui parle du Président.
+  `.president-grid` et `.president-photo` sont conservées telles quelles, elles portent
+  la mise en page de la section.
+
+**Vérification :** `npm run build` — sans erreur. `/realisation` répond en 200.
+
+---
+
 ## Notes et points en suspens
 
 - Les dossiers de `imageFamien` sont encore vides, sauf `accueil/` qui contient
@@ -228,3 +351,10 @@ serveur de développement.
   `src/imageFamien/index.ts`.
 - Le commentaire de `src/imageFamien/services/index.ts` cite encore `/#services` :
   la section est désormais la page `/services`.
+- Sous le titre **RÉALISATION YOPOUGON**, les deux paragraphes et les deux dates de la
+  frise de `components/Realisations.tsx` restent provisoires, en attente du texte.
+- **Vite sert parfois un module vide** après une réécriture complète de fichier : la
+  transformation est mise en cache pendant que le fichier est encore tronqué, et la
+  page devient blanche alors que `npm run build` passe. Un `touch` sur le fichier
+  suffit à forcer la relecture. Le projet étant dans OneDrive, la synchronisation rend
+  la course plus probable. Vérifier la taille servie après chaque réécriture.

@@ -20,6 +20,7 @@ export const NAV = [
   { to: '/nos-combats', label: 'Nos Combats' },
   { to: '/services', label: 'Services' },
   { to: '/le-president', label: 'Le Président' },
+  { to: '/realisation', label: 'Réalisations' },
   { to: '/contact', label: 'Contact' },
 ] as const
 

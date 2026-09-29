@@ -399,7 +399,16 @@ strong { font-weight: 700; }
 
 /* Bandeau mobilisation */
 .mobilisation { position: relative; margin-top: 56px; border-radius: var(--rayon-l); overflow: hidden; box-shadow: var(--ombre-md); }
-.mobilisation img { width: 100%; aspect-ratio: 21/8; object-fit: cover; transition: transform 1.1s var(--sortie); }
+.mobilisation img {
+  width: 100%;
+  aspect-ratio: 21/8;
+  object-fit: cover;
+  /* Le bandeau est bien plus large que la photo (21/8 contre 3/2) : seuls 57 % de sa
+     hauteur tiennent dedans. Cadré au centre, la fenêtre commencerait à 21 % et
+     couperait les visages, qui sont dans le premier quart. On cadre donc en haut. */
+  object-position: center top;
+  transition: transform 1.1s var(--sortie);
+}
 .mobilisation:hover img { transform: scale(1.05); }
 .mobilisation-text {
   position: absolute;
@@ -434,17 +443,48 @@ strong { font-weight: 700; }
 
 /* Président */
 .president-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 56px; align-items: center; }
+/* Carrousel d'images empilées qui se succèdent (voir Carrousel.tsx), utilisé par la
+   page du Président et celle des Réalisations. Le cadre porte la bordure, l'ombre et le
+   découpage ; seules les images bougent à l'intérieur, ce qui évite tout clignotement
+   d'une image à l'autre. */
 .president-photo { position: relative; }
-.president-photo img {
-  border-radius: var(--rayon-l);
+.carrousel-cadre {
+  position: relative;
   aspect-ratio: 3/4;
-  object-fit: cover;
-  width: 100%;
+  border-radius: var(--rayon-l);
   border: 4px solid var(--orange);
   box-shadow: var(--ombre-lg);
+  overflow: hidden;
   transition: transform var(--t-lent), box-shadow var(--t-lent);
 }
-.president-photo:hover img { transform: translateY(-8px) rotate(-1deg); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4); }
+.carrousel-cadre:hover { transform: translateY(-8px) rotate(-1deg); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4); }
+.carrousel-cadre img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  /* position d'attente, commune à tous les portraits : agrandi de 7 %, décalé vers le bas */
+  transform: translateY(12px) scale(1.07);
+  /* fondu court, déplacement long : le portrait continue de bouger une fois net */
+  transition: opacity 0.85s var(--sortie), transform 2.1s var(--sortie);
+  will-change: opacity, transform;
+}
+/* le portrait courant rejoint sa place */
+.carrousel-cadre img.is-active { opacity: 1; transform: none; }
+
+/* Moins d'animations : ni fondu ni mouvement, le portrait courant s'affiche net.
+   Le défilé lui-même est déjà coupé côté JavaScript (voir President.tsx). */
+@media (prefers-reduced-motion: reduce) {
+  .carrousel-cadre,
+  .carrousel-cadre:hover,
+  .carrousel-cadre img,
+  .carrousel-cadre img.is-active {
+    transition: none;
+    transform: none;
+  }
+}
 .section-dark p { color: rgba(255, 255, 255, 0.86); }
 .section-dark strong { color: var(--orange-vif); }
 
