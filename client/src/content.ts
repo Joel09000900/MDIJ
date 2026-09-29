@@ -10,17 +10,16 @@ export const CONTACT = {
 
 /**
  * Navigation principale.
- * « Le Mouvement » et « Services » restent des sections de l'accueil (ancres),
- * les trois autres entrées sont de vraies pages.
+ * Uniquement de vraies pages : plus aucune ancre. La section « Le Mouvement »
+ * reste sur l'accueil, atteignable par le bouton du héros. L'accès du président
+ * ne figure pas ici : il est dissimulé dans la mention légale du pied de page
+ * (voir Footer).
  */
 export const NAV = [
   { to: '/', label: 'Accueil' },
-  { to: '/#about', label: 'Le Mouvement' },
   { to: '/nos-combats', label: 'Nos Combats' },
-  { to: '/#services', label: 'Services' },
   { to: '/le-president', label: 'Le Président' },
   { to: '/contact', label: 'Contact' },
-  { to: '/connexion', label: 'Connexion' },
 ] as const
 
 export const PILIERS: Pilier[] = [

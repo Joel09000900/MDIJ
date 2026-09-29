@@ -578,8 +578,6 @@ strong { font-weight: 700; }
 /* Connexion */
 .connexion { max-width: 460px; }
 .connexion-titre { color: var(--violet); font-size: 30px; margin-bottom: 6px; }
-.nav a.nav-admin { color: var(--gris-clair); }
-.nav a.nav-admin:hover, .nav a.nav-admin.is-active { color: var(--violet); }
 
 /* ---- Tableau de bord du président ----
    Teintes de séries validées pour la vision des couleurs (ΔE 28 en protanopie).
@@ -936,6 +934,17 @@ strong { font-weight: 700; }
 .footer-reseaux a:hover { background: var(--marque); transform: translateY(-4px) scale(1.06); box-shadow: 0 10px 22px color-mix(in srgb, var(--marque) 50%, transparent); }
 
 .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center; padding: 18px 20px; font-size: 13px; color: rgba(255, 255, 255, 0.5); }
+/* Accès du président, dissimulé dans la mention légale : ni couleur, ni soulignement,
+   ni curseur de lien — il doit se lire comme la fin de la phrase. */
+.footer-acces {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: inherit;
+}
+.footer-acces:hover, .footer-acces:focus { color: inherit; text-decoration: none; }
+/* seule la navigation au clavier le révèle, pour rester utilisable */
+.footer-acces:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.45); outline-offset: 3px; }
 
 /* MODALE DE DON */
 .modal-backdrop {

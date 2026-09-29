@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import DonModal from './components/DonModal'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Reveal from './components/Reveal'
@@ -15,7 +13,6 @@ import NosCombats from './pages/NosCombats'
 import Rejoindre from './pages/Rejoindre'
 
 export default function App() {
-  const [donOuvert, setDonOuvert] = useState(false)
   const { pathname } = useLocation()
 
   return (
@@ -26,7 +23,7 @@ export default function App() {
       {/* la clé relance le fondu d'entrée à chaque changement de page */}
       <main className="page" key={pathname}>
         <Routes>
-          <Route path="/" element={<Accueil onDon={() => setDonOuvert(true)} />} />
+          <Route path="/" element={<Accueil />} />
           <Route path="/nos-combats" element={<NosCombats />} />
           <Route path="/le-president" element={<LePresident />} />
           <Route path="/contact" element={<Contact />} />
@@ -37,7 +34,6 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
-      <DonModal open={donOuvert} onClose={() => setDonOuvert(false)} />
       <WhatsAppFloat />
     </>
   )

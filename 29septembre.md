@@ -108,6 +108,83 @@ occurrence de `hero-visual` ou `hero-quote` dans `src/`.
 
 ---
 
+### 3. Accès du président dissimulé dans le pied de page
+
+**Contexte / demande :** retirer « Connexion » du menu et cacher cet accès dans la
+mention légale du pied de page, sous les mots « Parole tenue », sans décoration ni
+couleur qui trahisse un lien.
+
+**Fichiers touchés :** `client/src/components/Footer.tsx`,
+`client/src/components/Header.tsx`, `client/src/content.ts`,
+`client/src/styles/global.css`.
+
+**Détail :**
+
+- La ligne du pied de page devient :
+  « © 2024–2026 MDIJ — Tous droits réservés. **Parole tenue.** », où « Parole tenue. »
+  est un `<Link>` de classe `footer-acces`.
+- La classe hérite de la couleur, de la police et du curseur du texte qui l'entoure,
+  sans soulignement, au repos comme au survol. Seule la navigation au clavier la
+  révèle (`:focus-visible`), pour que la page reste utilisable.
+- La destination suit l'état de session, comme le faisait le menu : `/administration`
+  si un jeton est présent, `/connexion` sinon.
+- L'entrée « Connexion » disparaît de `NAV`. La logique dédiée du `Header` (bascule
+  vers « Tableau de bord », classe `nav-admin`) n'avait plus d'objet : la boucle de
+  navigation est redevenue une simple projection de `NAV`, et les deux règles CSS
+  `.nav a.nav-admin` ont été supprimées.
+- La route `/connexion` reste en place : elle n'est simplement plus annoncée.
+
+**Vérification :** `npm run build` — sans erreur. Plus aucune occurrence de
+`nav-admin` dans `src/`.
+
+> Une première version de cette modification retirait aussi la section Services de
+> l'accueil ; ce volet a été annulé, les services restent en place.
+
+---
+
+### 4. Section Services retirée de l'accueil
+
+**Contexte / demande :** supprimer la section `<section className="section" id="services">`
+de la page d'accueil.
+
+**Fichiers touchés :** `client/src/pages/Accueil.tsx`, `client/src/App.tsx`,
+`client/src/content.ts`.
+
+**Détail :**
+
+- `Accueil.tsx` ne rend plus que `<Hero />` et `<About />`.
+- L'entrée « Services » (`/#services`) est retirée de `NAV` : l'ancre n'existe plus.
+  Le menu compte désormais cinq entrées.
+- `Services.tsx` portait le seul bouton qui ouvrait la fenêtre de don. Sans lui,
+  `DonModal` n'est plus joignable et l'état `donOuvert` devenait inutilisé (erreur
+  `noUnusedLocals`) : le câblage `onDon` a donc été retiré de `App.tsx` et de
+  `Accueil.tsx`.
+- `Services.tsx` et `DonModal.tsx` restent sur le disque, simplement plus importés :
+  rien n'est perdu si la section ou le don doivent revenir.
+
+**Vérification :** `npm run build` — sans erreur.
+
+---
+
+### 5. « Le Mouvement » retiré du menu
+
+**Contexte / demande :** supprimer l'entrée « Le Mouvement » de la barre de navigation.
+
+**Fichiers touchés :** `client/src/content.ts`.
+
+**Détail :**
+
+- L'entrée `{ to: '/#about', label: 'Le Mouvement' }` quitte `NAV`. Le menu compte
+  désormais quatre entrées : Accueil, Nos Combats, Le Président, Contact — que des
+  pages, plus aucune ancre.
+- **La section elle-même reste sur l'accueil** : seul le lien du menu disparaît. Elle
+  garde son `id="about"`, toujours visé par le bouton « Découvrir le MDIJ » du héros,
+  donc `ScrollToHash` reste utile.
+
+**Vérification :** `npm run build` — sans erreur.
+
+---
+
 ## Notes et points en suspens
 
 - Les dossiers de `imageFamien` sont encore vides, sauf `accueil/` qui contient
@@ -121,3 +198,9 @@ occurrence de `hero-visual` ou `hero-quote` dans `src/`.
   dans « À faire ».
 - Si une entrée est ajoutée à `NAV`, créer le dossier correspondant et l'ajouter à
   `src/imageFamien/index.ts`.
+- **La fenêtre de don n'est plus atteignable** depuis le site : son unique bouton
+  était dans la section Services. `DonModal.tsx` est intact, il reste à décider où
+  replacer un bouton « Faire un don ».
+- `Services.tsx` et `DonModal.tsx` ne sont plus importés nulle part.
+- Le dossier `src/imageFamien/services/` subsiste alors que la section a quitté
+  l'accueil. À supprimer si elle ne revient pas.

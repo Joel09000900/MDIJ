@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { RESEAUX_CONTACT } from '../content'
+import { lireJeton } from '../session'
 import Logo from './Logo'
 import LogoReseau from './LogoReseau'
 
@@ -9,6 +10,9 @@ import LogoReseau from './LogoReseau'
  * dans le menu, on ne garde ici que l'identité, les réseaux et la mention légale.
  */
 export default function Footer() {
+  // l'accès du président est dissimulé dans la mention légale : « Parole tenue. »
+  const acces = lireJeton() ? '/administration' : '/connexion'
+
   return (
     <footer className="footer">
       <div className="container footer-inner">
@@ -36,7 +40,10 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-bottom">© 2024–2026 MDIJ — Tous droits réservés.</div>
+      <div className="footer-bottom">
+        © 2024–2026 MDIJ — Tous droits réservés.{' '}
+        <Link to={acces} className="footer-acces">Parole tenue.</Link>
+      </div>
     </footer>
   )
 }

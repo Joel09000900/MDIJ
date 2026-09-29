@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { NAV } from '../content'
-import { lireJeton } from '../session'
 import { appliquerTheme, themeInitial, type Theme } from '../theme'
 import Logo from './Logo'
 
@@ -49,22 +48,16 @@ export default function Header() {
         </Link>
 
         <nav className={`nav ${ouvert ? 'is-open' : ''}`}>
-          {NAV.map((l) => {
-            // une fois le président connecté, « Connexion » mène à son tableau de bord
-            const connecte = l.to === '/connexion' && Boolean(lireJeton())
-            const to = connecte ? '/administration' : l.to
-            const label = connecte ? 'Tableau de bord' : l.label
-            return (
-              <Link
-                key={l.to}
-                to={to}
-                className={`${estActif(to) ? 'is-active' : ''} ${l.to === '/connexion' ? 'nav-admin' : ''}`.trim() || undefined}
-                onClick={() => onClickLien(to)}
-              >
-                {label}
-              </Link>
-            )
-          })}
+          {NAV.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className={estActif(l.to) ? 'is-active' : undefined}
+              onClick={() => onClickLien(l.to)}
+            >
+              {l.label}
+            </Link>
+          ))}
           <Link to="/rejoindre" className="btn btn-primary nav-cta" onClick={() => onClickLien('/rejoindre')}>
             Rejoindre
           </Link>
