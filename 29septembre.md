@@ -336,6 +336,28 @@ bâtie exactement comme `LePresident.tsx`, avec son dossier dans `imageFamien`.
 
 ---
 
+### 10. Quatre portraits de plus dans le carrousel des Réalisations
+
+**Contexte / demande :** ajouter `r7` à `r10` aux images déjà défilantes de la page
+« Réalisations ».
+
+**Fichiers touchés :** `client/src/imageFamien/realisation/index.ts`.
+
+**Détail :**
+
+- Les quatre fichiers `r7.jpeg` à `r10.jpeg` étaient déjà déposés dans le dossier mais
+  absents du barrel : ils n'entraient donc ni dans le bundle ni dans le défilé.
+- Ils sont importés et ajoutés à la fin de `REALISATIONS`, dans l'ordre numérique —
+  `r10` après `r9`, l'ordre du tableau étant celui du défilé.
+- **Aucun composant n'a bougé.** `Realisations.tsx` passe `REALISATIONS` à `Carrousel`,
+  qui dimensionne son minuteur sur la longueur reçue : le carrousel compte désormais dix
+  vues de deux secondes au lieu de six, soit vingt secondes par tour.
+
+**Vérification :** `npm run build` — sans erreur ; les dix `r*.jpeg` sont dans
+`dist/assets/`, `r7` à `r10` compris.
+
+---
+
 ## Notes et points en suspens
 
 - Les dossiers de `imageFamien` sont encore vides, sauf `accueil/` qui contient
