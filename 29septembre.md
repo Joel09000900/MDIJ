@@ -185,6 +185,34 @@ de la page d'accueil.
 
 ---
 
+### 6. Services devient une vraie page
+
+**Contexte / demande :** garder « Services » dans la barre de navigation, en tant
+que page.
+
+**Fichiers touchés :** `client/src/components/Services.tsx` déplacé vers
+`client/src/pages/Services.tsx`, `client/src/App.tsx`, `client/src/content.ts`.
+
+**Détail :**
+
+- Le composant quitte `components/` pour `pages/` : ce n'est plus une section de
+  l'accueil mais une page, comme `Contact.tsx`. Le fichier lui-même est inchangé,
+  hors commentaire d'en-tête ; `from '../content'` reste valable, les deux dossiers
+  étant au même niveau.
+- Nouvelle route `/services` dans `App.tsx`, et entrée `{ to: '/services',
+  label: 'Services' }` dans `NAV`, après « Nos Combats ». Le menu revient à cinq
+  entrées.
+- **La fenêtre de don redevient atteignable** : la page porte le bouton qui l'ouvre,
+  donc le câblage `onDon` et le rendu de `DonModal` reviennent dans `App.tsx`. Le
+  point en suspens de la section 4 est résolu.
+- La section garde son `id="services"`, comme `Contact.tsx` garde `id="contact"`.
+  Il ne sert plus d'ancre de menu, la navigation se faisant par la route.
+
+**Vérification :** `npm run build` — sans erreur. `/services` répond en 200 sur le
+serveur de développement.
+
+---
+
 ## Notes et points en suspens
 
 - Les dossiers de `imageFamien` sont encore vides, sauf `accueil/` qui contient
@@ -198,9 +226,5 @@ de la page d'accueil.
   dans « À faire ».
 - Si une entrée est ajoutée à `NAV`, créer le dossier correspondant et l'ajouter à
   `src/imageFamien/index.ts`.
-- **La fenêtre de don n'est plus atteignable** depuis le site : son unique bouton
-  était dans la section Services. `DonModal.tsx` est intact, il reste à décider où
-  replacer un bouton « Faire un don ».
-- `Services.tsx` et `DonModal.tsx` ne sont plus importés nulle part.
-- Le dossier `src/imageFamien/services/` subsiste alors que la section a quitté
-  l'accueil. À supprimer si elle ne revient pas.
+- Le commentaire de `src/imageFamien/services/index.ts` cite encore `/#services` :
+  la section est désormais la page `/services`.

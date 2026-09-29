@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { SERVICES, waLink } from '../content'
 
+/** Page « Services » : ce que le MDIJ propose, et le bouton de don. */
 export default function Services({ onDon }: { onDon: () => void }) {
   return (
     <section id="services" className="section">

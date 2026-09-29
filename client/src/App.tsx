@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import DonModal from './components/DonModal'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Reveal from './components/Reveal'
@@ -11,8 +13,10 @@ import Contact from './pages/Contact'
 import LePresident from './pages/LePresident'
 import NosCombats from './pages/NosCombats'
 import Rejoindre from './pages/Rejoindre'
+import Services from './pages/Services'
 
 export default function App() {
+  const [donOuvert, setDonOuvert] = useState(false)
   const { pathname } = useLocation()
 
   return (
@@ -25,6 +29,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Accueil />} />
           <Route path="/nos-combats" element={<NosCombats />} />
+          <Route path="/services" element={<Services onDon={() => setDonOuvert(true)} />} />
           <Route path="/le-president" element={<LePresident />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/rejoindre" element={<Rejoindre />} />
@@ -34,6 +39,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <DonModal open={donOuvert} onClose={() => setDonOuvert(false)} />
       <WhatsAppFloat />
     </>
   )

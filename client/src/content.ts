@@ -18,6 +18,7 @@ export const CONTACT = {
 export const NAV = [
   { to: '/', label: 'Accueil' },
   { to: '/nos-combats', label: 'Nos Combats' },
+  { to: '/services', label: 'Services' },
   { to: '/le-president', label: 'Le Président' },
   { to: '/contact', label: 'Contact' },
 ] as const
