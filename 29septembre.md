@@ -98,6 +98,9 @@ import { marcheJeunesse } from '../imageFamien/nos-combats'
   `.hero-quote`, `.hero-quote strong`, `.hero-quote span`, ainsi que leurs variantes
   en mode nuit et dans la requête média.
 - Mode nuit : `.theme-sombre .hero` garde la même photo sous un voile plus dense.
+- Cadrage affiné après relecture : `background-position: center 30%` au lieu de
+  `center`. Le sujet est haut dans la photo ; le décalage le ramène vers le milieu
+  de la bande et laisse voir les bras levés plutôt que le bas des vêtements.
 
 **Vérification :** `npm run build` — compilation TypeScript et build Vite sans erreur ;
 `heros.jpeg` est bien intégré au bundle (`dist/assets/heros-4A6oAjOC.jpeg`). Plus aucune

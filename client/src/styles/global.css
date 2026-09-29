@@ -271,7 +271,8 @@ strong { font-weight: 700; }
     linear-gradient(120deg, rgba(29, 8, 41, 0.92), rgba(78, 26, 107, 0.74) 52%, rgba(47, 15, 66, 0.88)),
     var(--hero-image);
   background-size: cover;
-  background-position: center;
+  /* le sujet est haut dans la photo : on descend le cadrage pour le ramener vers le milieu */
+  background-position: center 30%;
   background-repeat: no-repeat;
 }
 /* Deux halos lumineux qui respirent derrière le texte */
