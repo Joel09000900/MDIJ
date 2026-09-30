@@ -47,6 +47,21 @@ build au lieu de passer inaperçu, les fichiers reçoivent une empreinte pour la
 en cache, et les petites images sont intégrées automatiquement. Dans `public/`, les
 chemins ne sont jamais vérifiés.
 
-> Les images historiques (`logo.png`, `meeting.jpg`, `mobilisation.jpg`,
-> `president.jpg`) sont encore dans `client/public/images/` et référencées par
-> chemin absolu. Leur migration vers ce dossier reste à faire.
+> `mobilisation.jpg` a rejoint `nos-combats/`. Restent dans `client/public/images/`,
+> référencées par chemin absolu : `logo.png` (utilisée par `Logo.tsx`), `meeting.jpg`
+> et `president.jpg` (plus utilisées). Leur migration reste à faire.
+
+## Images plus larges que leur cadre
+
+Un cadre de carrousel rogne les photos qui n'ont pas sa proportion, à partir du
+centre. Si le sujet est décentré, l'exporter avec son point de cadrage plutôt que
+comme un simple chemin :
+
+```ts
+import type { ImageCarrousel } from '../../components/Carrousel'
+
+export const PORTRAITS: readonly ImageCarrousel[] = [
+  portrait1,
+  { src: portrait9, cadrage: '24% center' }, // photo de groupe : le sujet est à gauche
+]
+```

@@ -399,16 +399,24 @@ strong { font-weight: 700; }
 
 /* Bandeau mobilisation */
 .mobilisation { position: relative; margin-top: 56px; border-radius: var(--rayon-l); overflow: hidden; box-shadow: var(--ombre-md); }
-.mobilisation img {
+/* Deux photos empilées qui se succèdent en fondu (voir Carrousel.tsx). Le cadre
+   porte la proportion, les photos se contentent de le remplir. */
+.mobilisation-images { position: relative; aspect-ratio: 21/8; }
+.mobilisation-images img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  aspect-ratio: 21/8;
+  height: 100%;
   object-fit: cover;
-  /* Le bandeau est bien plus large que la photo (21/8 contre 3/2) : seuls 57 % de sa
-     hauteur tiennent dedans. Cadré au centre, la fenêtre commencerait à 21 % et
-     couperait les visages, qui sont dans le premier quart. On cadre donc en haut. */
+  /* Le bandeau est bien plus large que les photos (21/8 contre 3/2) : seuls 57 % de
+     leur hauteur tiennent dedans. Cadrées au centre, la fenêtre commencerait à 21 %
+     et couperait les visages, qui sont dans le premier quart. On cadre donc en haut. */
   object-position: center top;
-  transition: transform 1.1s var(--sortie);
+  opacity: 0;
+  transition: opacity 0.9s var(--sortie), transform 1.1s var(--sortie);
 }
+/* la photo courante est seule visible ; le fondu croise les deux */
+.mobilisation-images img.is-active { opacity: 1; }
 .mobilisation:hover img { transform: scale(1.05); }
 .mobilisation-text {
   position: absolute;
@@ -480,7 +488,9 @@ strong { font-weight: 700; }
   .carrousel-cadre,
   .carrousel-cadre:hover,
   .carrousel-cadre img,
-  .carrousel-cadre img.is-active {
+  .carrousel-cadre img.is-active,
+  .mobilisation-images img,
+  .mobilisation:hover img {
     transition: none;
     transform: none;
   }
@@ -1120,7 +1130,7 @@ strong { font-weight: 700; }
   .piliers, .tuiles { grid-template-columns: 1fr; }
   .section { padding: 60px 0; }
   .demandes-recherche { min-width: 0; width: 100%; }
-  .mobilisation img { aspect-ratio: 4/3; }
+  .mobilisation-images { aspect-ratio: 4/3; }
   .mobilisation-text { padding: 22px; }
   .card { padding: 24px; }
   .btn { padding: 13px 22px; }

@@ -358,10 +358,113 @@ bâtie exactement comme `LePresident.tsx`, avec son dossier dans `imageFamien`.
 
 ---
 
+### 11. Barrels d'`imageFamien` alignés sur les fichiers déposés
+
+**Contexte / demande :** mettre à jour les images de chaque dossier d'`imageFamien`
+selon leur section.
+
+**Fichiers touchés :** `client/src/imageFamien/le-president/index.ts`,
+`client/src/imageFamien/nos-combats/index.ts`,
+`client/src/imageFamien/services/index.ts`.
+
+**Détail :**
+
+- Relevé des dossiers : `accueil/heros.jpeg`, `le-president/Pfamien1..10.jpeg`,
+  `nos-combats/Rea1.jpeg`, `realisation/r1..10.jpeg` ; `commun/`, `services/`,
+  `contact/`, `connexion/` et `rejoindre/` sont encore vides. Deux dossiers étaient
+  en retard sur leur contenu.
+- **Le Président : cinq portraits de plus.** `Pfamien6` à `Pfamien10` étaient sur le
+  disque mais absents du barrel — hors bundle, hors défilé. Ils sont importés et
+  ajoutés à la fin de `PORTRAITS`, dans l'ordre numérique. Le carrousel passe de cinq
+  à dix vues de deux secondes, soit vingt secondes par tour ; aucun composant n'a
+  bougé, `Carrousel` dimensionne son minuteur sur la longueur reçue.
+- `PORTRAITS` est typé `readonly string[]`, comme `REALISATIONS` : les deux tableaux
+  alimentent le même composant, autant qu'ils aient le même type.
+- **Nos Combats : `Rea1.jpeg` exporté.** Le fichier est désormais importé et exporté
+  sous le nom `rea1`. Le nom du fichier n'a pas été changé : le renommer aurait
+  dépassé la demande.
+- Le commentaire d'en-tête de `services/index.ts` citait encore `/#services` ; il dit
+  maintenant `/services`, la section étant une page depuis le point 6.
+
+**Vérification :** `npm run build` — sans erreur ; les dix `Pfamien*.jpeg` sont dans
+`dist/assets/`, `Pfamien6` à `Pfamien10` compris.
+
+> `Rea1.jpeg` n'apparaît pas dans `dist/` : il est exporté mais encore importé par
+> aucun composant, donc élagué à la compilation. Il entrera au bundle dès qu'une page
+> l'affichera.
+
+---
+
+### 12. Cadrage de `Pfamien9` et bandeau « mobilisation » à deux photos
+
+**Contexte / demande :** `Pfamien9` s'affichait comme un paysage et non comme un
+portrait ; puis, sur Nos Combats, faire défiler `Rea1.jpeg` **avec**
+`mobilisation.jpg` plutôt que de remplacer celle-ci.
+
+**Fichiers touchés :** `client/src/components/Carrousel.tsx`,
+`client/src/components/Mission.tsx`,
+`client/src/imageFamien/le-president/index.ts`,
+`client/src/imageFamien/nos-combats/index.ts`,
+`client/src/styles/global.css`, `client/src/imageFamien/README.md` ;
+`client/public/images/mobilisation.jpg` déplacée vers
+`client/src/imageFamien/nos-combats/`.
+
+**Détail — le cadrage de `Pfamien9` :**
+
+- Relevé des proportions du dossier : trois photos sur dix sont en paysage —
+  `Pfamien1` (1280 × 853), `Pfamien7` (1500 × 1000) et `Pfamien9` (2560 × 1706),
+  toutes en 3/2. Le cadre étant en 3/4, `object-fit: cover` n'en montre que
+  **50 % de la largeur**, prise au centre.
+- `Pfamien9` est une photo de groupe : quatre hommes côte à côte. Le Président est
+  le deuxième en partant de la gauche, centré vers 37 % de la largeur. La fenêtre
+  par défaut allant de 25 % à 75 %, le cadre s'ouvrait sur **son voisin**, lui-même
+  coupé en deux — d'où l'impression d'un cliché large mal recadré.
+- `Carrousel` accepte désormais, au lieu d'un simple chemin, un objet
+  `{ src, cadrage }` où `cadrage` est une valeur `object-position` posée en style
+  en ligne. `Pfamien9` est déclarée `{ src: portrait9, cadrage: '24% center' }` :
+  la fenêtre passe de 25–75 % à 12–62 % et le Président vient au milieu du cadre.
+- **Pourquoi 24 %.** La fenêtre couvre 49,98 % de la largeur ; pour la centrer sur
+  un sujet situé à 37,25 %, son bord gauche doit tomber à 12,26 %, soit 24,5 % du
+  débord de 50,03 %. Un déplacement, pas un zoom : `object-position` ne fait que
+  choisir où couper.
+- `Pfamien1` (sujet à 46 %) et `Pfamien7` (sujet à 54 %) restent au cadrage par
+  défaut : leur sujet est déjà dans la fenêtre. Le mécanisme est là si besoin.
+- Les fichiers d'origine ne sont pas touchés : le cadrage se corrige en changeant un
+  pourcentage, sans repasser par une image.
+
+**Détail — le bandeau à deux photos :**
+
+- `mobilisation.jpg` quitte `public/images/` pour `imageFamien/nos-combats/` : les
+  deux photos du bandeau vivent maintenant côte à côte, et Vite les empreinte.
+  C'est une première tranche de la migration notée dans « À faire ».
+- Le barrel exporte `MOBILISATION = [mobilisation, rea1]` — `mobilisation.jpg`
+  d'abord : le premier affichage de la page ne change pas.
+- `Mission.tsx` remplace son `<img>` par un `Carrousel`. **La photo d'origine reste**,
+  `Rea1.jpeg` s'ajoute derrière elle.
+- **Le carrousel est réutilisé, pas recopié.** Deux réglages lui ont été ajoutés
+  pour qu'il serve aussi ici : `className` (le bandeau n'est pas le cadre 3/4 à
+  bordure orange des portraits) et `duree`. Par défaut, le cadre et les 2 s des
+  portraits — les deux pages existantes n'ont pas bougé.
+- **5 s par photo sur le bandeau**, contre 2 s pour les portraits : l'image est large
+  et porte un titre en surimpression ; à 2 s le va-et-vient tirait l'œil hors du texte.
+- Côté CSS, `.mobilisation img` devient `.mobilisation-images` : le cadre porte la
+  proportion (21/8, 4/3 sur mobile), les photos empilées le remplissent et se croisent
+  en fondu. Le cadrage `center top` et le zoom au survol sont conservés.
+- Le bloc `prefers-reduced-motion` couvre le nouveau bandeau : ni fondu ni survol, et
+  le défilé était déjà coupé côté JavaScript.
+
+**Vérification :** `npm run build` — sans erreur ; `mobilisation.jpg` et `Rea1.jpeg`
+sont tous deux dans `dist/assets/`.
+
+---
+
 ## Notes et points en suspens
 
-- Les dossiers de `imageFamien` sont encore vides, sauf `accueil/` qui contient
-  `heros.jpeg`.
+- Dossiers d'`imageFamien` encore vides : `commun/`, `services/`, `contact/`,
+  `connexion/`, `rejoindre/`.
+- `client/public/images/` ne contient plus que `logo.png` (utilisée par `Logo.tsx`),
+  `meeting.jpg` et `president.jpg` (plus utilisées nulle part). La migration de
+  `logo.png` reste à faire ; les deux autres sont à supprimer.
 - L'image `public/images/meeting.jpg` n'est plus utilisée nulle part depuis la
   suppression de `hero-visual`.
 - L'animation `@keyframes degradeAnime` (ligne 118 de `global.css`) n'est plus

@@ -1,5 +1,7 @@
 import type { CSSProperties } from 'react'
 import { PILIERS } from '../content'
+import { MOBILISATION } from '../imageFamien/nos-combats'
+import Carrousel from './Carrousel'
 
 export default function Mission() {
   return (
@@ -27,7 +29,12 @@ export default function Mission() {
         </div>
 
         <div className="mobilisation" data-reveal>
-          <img src="/images/mobilisation.jpg" alt="Mobilisation des jeunes du MDIJ" />
+          <Carrousel
+            images={MOBILISATION}
+            libelle="Mobilisation des jeunes du MDIJ"
+            className="mobilisation-images"
+            duree={5000}
+          />
           <div className="mobilisation-text">
             <h3>Une jeunesse debout, unie et déterminée</h3>
             <p>Sur le terrain, à chaque rassemblement, le MDIJ transforme l'énergie de la jeunesse en force de changement.</p>
