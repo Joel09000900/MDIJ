@@ -361,6 +361,17 @@ strong { font-weight: 700; }
 
 /* À propos */
 .about-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: start; }
+/* Le cadrage vise le jeune en t-shirt blanc, légèrement à droite du centre. */
+.about-image img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  object-position: 56% 50%;
+  border-radius: var(--rayon-l);
+  box-shadow: var(--ombre-lg);
+  transition: transform var(--t-lent), box-shadow var(--t-lent);
+}
+.about-image:hover img { transform: translateY(-8px); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25); }
 .about-text p { color: var(--gris); }
 .about-text strong { color: var(--violet); }
 

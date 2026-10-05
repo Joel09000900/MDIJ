@@ -1,15 +1,21 @@
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
+import { heros2 } from '../imageFamien/accueil'
 
 export default function About() {
   return (
     <section id="about" className="section">
       <div className="container about-grid">
+
+        <div className="about-image" data-reveal>
+          <img src={heros2} alt="Des jeunes militants du MDIJ lors d'une rencontre" />
+        </div>
+        <div className="about-text" data-reveal style={{ '--delai': '0.12s' } as CSSProperties}>
         <div data-reveal>
+
           <span className="section-tag">Qui sommes-nous</span>
           <h2 className="section-title">Le MDIJ, l'équipe de confiance de la jeunesse ivoirienne.</h2>
         </div>
-        <div className="about-text" data-reveal style={{ '--delai': '0.12s' } as CSSProperties}>
           <p>
             Fondé le <strong>11 septembre 2024</strong>, le MDIJ est né d'une conviction simple : la jeunesse doit
             compter.
