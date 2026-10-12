@@ -500,12 +500,98 @@ strong { font-weight: 700; }
   .carrousel-cadre:hover,
   .carrousel-cadre img,
   .carrousel-cadre img.is-active,
+  .galerie-cadre img,
+  .galerie-cadre img.is-active,
   .mobilisation-images img,
   .mobilisation:hover img {
     transition: none;
     transform: none;
   }
 }
+/* Réalisations : la colonne d'images, centrée, et le bouton qui ouvre les paysages.
+   Seuls les portraits défilent ici ; les images paysage, de proportion inverse, étaient
+   rognées dans le cadre 3/4 — elles ont désormais leur propre fenêtre. */
+.realisation-media { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+/* Le cadre est cliquable : ce bouton ne sert qu'à transmettre le clic, sans rien peindre. */
+.realisation-apercu {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.realisation-apercu:focus-visible { outline: 2px solid var(--orange); outline-offset: 6px; border-radius: var(--rayon-l); }
+
+/* FENÊTRE « EN SAVOIR PLUS » (images paysage) */
+.galerie-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 5, 30, 0.74);
+  /* floute toute la page derrière le voile : il ne reste que les images */
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  animation: apparait 0.25s var(--doux) both;
+}
+.galerie {
+  position: relative;
+  /* Le cadre est en 3/2 : sa hauteur suit sa largeur. Sur un ecran bas, 920px de large
+     donnent 613px de haut et la fenetre deborde — d'ou la largeur bornee par la hauteur
+     disponible (le voile garde 24px de marge en haut et en bas). */
+  width: min(920px, 100%, calc((100vh - 48px) * 1.5));
+  animation: zoomEntre 0.38s var(--sortie) both;
+}
+/* dvh : sur mobile, la barre d'adresse ne doit pas rogner le bas du cadre */
+@supports (height: 100dvh) {
+  .galerie { width: min(920px, 100%, calc((100dvh - 48px) * 1.5)); }
+}
+.galerie-cadre {
+  position: relative;
+  /* 3/2 : la proportion des clichés paysage (1280 × 853), donc aucun bord rogné */
+  aspect-ratio: 3/2;
+  border-radius: var(--rayon-l);
+  border: 4px solid var(--orange);
+  box-shadow: var(--ombre-lg);
+  overflow: hidden;
+  background: #000;
+}
+.galerie-cadre img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  /* fondu simple : le cadre est à la proportion des images, rien à déplacer */
+  transition: opacity 0.8s var(--sortie);
+}
+.galerie-cadre img.is-active { opacity: 1; }
+.galerie-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 5, 30, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--blanc);
+  cursor: pointer;
+  transition: background var(--t), color var(--t), transform var(--t);
+}
+.galerie-close:hover { background: var(--blanc); color: var(--violet); transform: rotate(90deg); }
+
 .section-dark p { color: rgba(255, 255, 255, 0.86); }
 .section-dark strong { color: var(--orange-vif); }
 
