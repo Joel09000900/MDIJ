@@ -53,7 +53,7 @@ Il faut Node.js 18 ou plus récent.
 
 ```bash
 npm run install:all   # installe racine, server et client
-npm run dev           # API sur :4000, site sur :5173
+npm run dev           # API sur :4001, site sur :5174
 ```
 
 `server/.env` contient déjà la chaîne Neon, le jeton et le mot de passe.

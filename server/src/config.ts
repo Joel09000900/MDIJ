@@ -7,8 +7,9 @@ function required(name: string, fallback?: string): string {
 }
 
 export const config = {
-  port: Number(process.env.PORT ?? 4000),
-  clientOrigins: required('CLIENT_ORIGIN', 'http://localhost:5173')
+  // 4001 par defaut : le 4000 est pris par l'API du projet OliKrys en developpement.
+  port: Number(process.env.PORT ?? 4001),
+  clientOrigins: required('CLIENT_ORIGIN', 'http://localhost:5174')
     .split(',')
     .map((o) => o.trim()),
   whatsappNumber: required('WHATSAPP_NUMBER', '2250702050284'),
