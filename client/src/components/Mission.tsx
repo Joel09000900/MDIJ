@@ -33,7 +33,7 @@ export default function Mission() {
             images={MOBILISATION}
             libelle="Mobilisation des jeunes du MDIJ"
             className="mobilisation-images"
-            duree={5000}
+            duree={1000}
           />
           <div className="mobilisation-text">
             <h3>Une jeunesse debout, unie et déterminée</h3>

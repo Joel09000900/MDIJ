@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-/** Durée d'affichage de chaque image, en millisecondes, faute de mieux. */
-const DUREE_DEFAUT = 2000
+/** Durée d'affichage de chaque image, en millisecondes : une seconde par image. */
+const DUREE_DEFAUT = 1000
 
 /**
  * Une image du carrousel.

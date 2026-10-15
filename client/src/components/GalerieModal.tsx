@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import Carrousel from './Carrousel'
 
-/** Durée d'affichage de chaque image, plus longue que dans la section : on vient ici pour regarder. */
-const DUREE = 3200
+/** Durée d'affichage de chaque image : une seconde, comme partout ailleurs sur le site. */
+const DUREE = 1000
 
 type Props = {
   open: boolean
