@@ -10,6 +10,7 @@ import Accueil from './pages/Accueil'
 import Administration from './pages/Administration'
 import Connexion from './pages/Connexion'
 import Contact from './pages/Contact'
+import DonWave from './pages/DonWave'
 import LePresident from './pages/LePresident'
 import NosCombats from './pages/NosCombats'
 import Realisation from './pages/Realisation'
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/" element={<Accueil />} />
           <Route path="/nos-combats" element={<NosCombats />} />
           <Route path="/services" element={<Services onDon={() => setDonOuvert(true)} />} />
+          <Route path="/don/wave" element={<DonWave />} />
           <Route path="/le-president" element={<LePresident />} />
           <Route path="/realisation" element={<Realisation />} />
           <Route path="/contact" element={<Contact />} />

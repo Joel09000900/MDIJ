@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CONTACT, MESSAGE_CONTACT, waLink } from '../content'
 
+const WAVE = { logo: 'WAVE', nom: 'Wave', detail: 'Choisis ton montant et scanne le code QR', couleur: '#1DC8F2' } as const
+
 const APPS = [
-  { id: 'wave', logo: 'WAVE', nom: 'Wave', detail: 'Envoi rapide et sans frais', url: 'https://wave.com', couleur: '#1DC8F2' },
   { id: 'maxit', logo: 'Max it', nom: 'Max It — Orange Money', detail: "Via l'application Orange", url: 'https://www.orange.ci', couleur: '#FF7900' },
 ] as const
 
@@ -43,9 +45,19 @@ export default function DonModal({ open, onClose }: { open: boolean; onClose: ()
         <button type="button" className="modal-close" aria-label="Fermer" onClick={onClose}>×</button>
         <h3 id="don-titre">Faire un don ou legs 🎁</h3>
         <p>
-          Choisis ton appli : elle s'ouvre et le numéro du MDIJ est copié — colle-le et entre le montant. Merci de
+          Avec Wave, choisis ton montant sur la page dédiée. Avec Max It, l'appli s'ouvre et le numéro du MDIJ est copié — colle-le et entre le montant. Merci de
           soutenir le combat de la jeunesse !
         </p>
+
+        {/* Wave : une page dédiée, avec un code QR et un lien par montant */}
+        <Link className="pay-option" to="/don/wave" onClick={onClose}>
+          <span className="pay-logo" style={{ background: WAVE.couleur }}>{WAVE.logo}</span>
+          <span className="pay-text">
+            <strong>{WAVE.nom}</strong>
+            <small>{WAVE.detail}</small>
+          </span>
+          <span className="pay-cta">Payer par Wave</span>
+        </Link>
 
         {APPS.map((a) => (
           <a

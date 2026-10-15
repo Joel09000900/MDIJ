@@ -76,6 +76,21 @@ export const SERVICES: Service[] = [
   },
 ]
 
+/**
+ * Dons par Wave — page /don/wave.
+ *
+ * Le lien de paiement du MDIJ est le même pour tous les montants ; seul le paramètre
+ * `amount` change. Ajouter ou retirer un montant ici suffit : la page en tire les
+ * cartes, les codes QR et les boutons.
+ */
+const WAVE_PAIEMENT = 'https://pay.wave.com/m/M_ci_R4bvgJe798RJ/c/ci/'
+
+export const MONTANTS_WAVE = [2000, 5000, 10000, 25000, 50000, 100000, 500000, 1000000] as const
+
+export function waveLien(montant: number): string {
+  return `${WAVE_PAIEMENT}?amount=${montant}`
+}
+
 export const AVANTAGES = [
   'Participe aux actions de terrain à Yopougon',
   'Forme-toi et développe ton leadership',

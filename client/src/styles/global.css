@@ -1157,6 +1157,43 @@ strong { font-weight: 700; }
 .pay-cta { background: var(--violet); color: var(--blanc); padding: 7px 16px; border-radius: var(--rayon-rond); font-weight: 700; font-size: 13px; transition: background var(--t); }
 .pay-option:hover .pay-cta { background: var(--orange); }
 
+/* DON PAR WAVE (/don/wave) : une carte par montant, avec son code QR.
+   Le QR reste noir sur blanc, y compris en theme sombre : c'est ce qui le rend scannable. */
+.wave-logo {
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 18px;
+  padding: 10px 22px;
+  border-radius: var(--rayon-s);
+  background: #1dc8f2;
+  color: var(--blanc);
+  font-family: var(--police-titre);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  box-shadow: var(--ombre-sm);
+}
+.wave-grille { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.wave-carte { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 20px; text-align: center; }
+.wave-montant { font-family: var(--police-titre); font-size: 22px; color: var(--violet); line-height: 1.1; }
+.wave-qr {
+  width: 176px;
+  height: 176px;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--violet-bord);
+  border-radius: var(--rayon-s);
+}
+.wave-qr img { display: block; width: 160px; height: 160px; }
+.wave-qr-attente { width: 120px; height: 120px; border-radius: var(--rayon-s); background: var(--violet-clair); }
+.wave-note { text-align: center; color: var(--gris); font-size: 14.5px; margin: 36px 0 0; }
+.wave-retour { text-align: center; margin: 14px 0 0; }
+.wave-retour a { color: var(--violet); font-weight: 600; text-decoration: none; }
+.wave-retour a:hover { text-decoration: underline; }
+
 .don-numero {
   background: var(--violet-clair);
   border: 1px dashed var(--violet-bord);
@@ -1199,6 +1236,7 @@ strong { font-weight: 700; }
   .about-grid, .president-grid, .rejoindre-grid, .reseaux-grid { grid-template-columns: 1fr; }
   .piliers { grid-template-columns: repeat(2, 1fr); }
   .services, .graphes { grid-template-columns: 1fr; }
+  .wave-grille { grid-template-columns: repeat(2, 1fr); }
   .tuiles { grid-template-columns: repeat(2, 1fr); }
   .hero { padding: 68px 0 80px; min-height: auto; }
   .burger { display: block; }
@@ -1224,7 +1262,7 @@ strong { font-weight: 700; }
 }
 
 @media (max-width: 560px) {
-  .piliers, .tuiles { grid-template-columns: 1fr; }
+  .piliers, .tuiles, .wave-grille { grid-template-columns: 1fr; }
   .section { padding: 60px 0; }
   .demandes-recherche { min-width: 0; width: 100%; }
   .mobilisation-images { aspect-ratio: 4/3; }
